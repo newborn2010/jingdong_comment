@@ -11,10 +11,10 @@ warnings.filterwarnings('ignore')
 from selenium import webdriver
 import re
 import requests as rq
-import re
 import time
 import pymysql as sql
 
+begin = time.time()
 all_id = []
 pages = range(1,6)
 for page in pages:
@@ -27,7 +27,7 @@ for page in pages:
     for i in ifo:
         all_id.append(int(i))
 
-id = list(set(all_id))
+item_id = list(set(all_id))
 
 # check
 # =============================================================================
@@ -41,24 +41,42 @@ id = list(set(all_id))
 #     browser.switch_to_window(browser.window_handles[count])
 # =============================================================================
 
+# connect mysql
+con = sql.connect(host='localhost', user='root',passwd='',db='jingdong',charset='utf8')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# begin
+for itemId in item_id:
+    total_pages = 1000
+    count = 0
+    comments = []
+    times = []
+    names = []
+    for i in range(total_pages):
+        page = str(i+1)
+        url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=6&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
+        myweb = rq.get(url)
+        comment_time_name = re.findall('\"guid\":(\".*?\")\,\"referenceName\"', myweb.text)
+        item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
+        for mes in comment_time_name:
+            comment = re.findall('\"content\":(\".*?\")\,\"creationTime\"', mes)
+            co_time = re.findall('\"creationTime\":(\".*?\")\,\"', mes)
+            for num in range(len(comment)):
+                comments.append(comment[num][1:-1])
+                times.append(co_time[num][1:-1])
+                names.append(item_name[num][1:-1])
+                count += 1
+                print('get No. {}'.format(count))
+    # mysql
+    cursor = con.cursor()
+    item_table = 'create table table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),time datetime,comments varchar(10000000))' 
+    cursor.execute(item_table)
+    cursor.close()
+    for i in range(len(comments)):
+        cursor = con.cursor()
+        query = ('insert into table' + str(itemId) + '(name, time, comments) values (%s, %s, %s)')
+        cursor.execute(query, (names[i], times[i], comments[i]))
+        con.commit()
+        cursor.close()
+con.close()
+end = time.time()
+print('Total {0:.1f} min !'.format((end-begin)/60))
