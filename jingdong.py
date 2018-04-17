@@ -42,7 +42,7 @@ item_id = list(set(all_id))
 # =============================================================================
 
 # connect mysql
-con = sql.connect(host='localhost', user='root',passwd='',db='jingdong',charset='utf8')
+con = sql.connect(host='localhost', user='xxxx',passwd='xxxxx',db='jingdong',charset='utf8')
 
 # begin
 for itemId in item_id:
