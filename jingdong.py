@@ -77,6 +77,12 @@ for itemId in item_id:
         cursor.execute(query, (names[i], times[i], comments[i]))
         con.commit()
         cursor.close()
+# =============================================================================
+#     cursor = con.cursor()
+#     delete ='delete from table' + str(itemId) + ' where comments in (select comments from table' + str(itemId) + ' group by comments having count(comments)>1) and comments not in (select min(time) from table' + str(itemId) + 'group by comments having count(comments)>1)' 
+#     cursor.execute(delete)
+#     cursor.close()
+# =============================================================================
 con.close()
 end = time.time()
 print('Total {0:.1f} min !'.format((end-begin)/60))
