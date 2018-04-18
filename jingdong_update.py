@@ -19,6 +19,11 @@ import datetime
 with open('/Users/zt/Desktop/time.txt','r') as zjw:
     last_time = zjw.read()
 
+# time
+end_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+with open('/Users/zt/Desktop/time.txt','w') as zt:
+    zt.write(end_time)
+    
 # get id
 begin = time.time()
 all_id = []
@@ -51,8 +56,10 @@ item_id = list(set(all_id))
 con = sql.connect(host='localhost', user='root',passwd='',db='jingdong',charset='utf8')
 
 # begin
+number = 1
+update = 0
 for itemId in item_id:
-    total_pages = 100
+    total_pages = 200
     count = 0
     comments = []
     times = []
@@ -71,7 +78,7 @@ for itemId in item_id:
                 times.append(co_time[num][1:-1])
                 names.append(item_name[num][1:-1])
                 count += 1
-                print('get No. {}'.format(count))
+                print('get No. {0} in item {1}'.format(count, number))
         time.sleep(0.05)
         # select
         for i in range(len(times)):
@@ -81,6 +88,8 @@ for itemId in item_id:
         comments = comments[:cut]
         times = times[:cut]
         names = names[:cut]
+        update += len(times)
+    number += 1
                 
     # mysql
     cursor = con.cursor()
@@ -93,6 +102,7 @@ for itemId in item_id:
         cursor.execute(query, (names[i], times[i], comments[i]))
         con.commit()
         cursor.close()
+    num += 1
 # =============================================================================
 #     cursor = con.cursor()
 #     delete ='delete from table' + str(itemId) + ' where comments in (select comments from table' + str(itemId) + ' group by comments having count(comments)>1) and comments not in (select min(time) from table' + str(itemId) + 'group by comments having count(comments)>1)' 
@@ -103,8 +113,5 @@ con.close()
 end = time.time()
 print('Total {0:.1f} min !'.format((end-begin)/60))
 
-# time
-end_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-with open('/Users/zt/Desktop/time.txt','w') as zt:
-    zt.write(end_time)
+
     
