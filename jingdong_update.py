@@ -80,15 +80,15 @@ for itemId in item_id:
                 count += 1
                 print('get No. {0} in item {1}'.format(count, number))
         time.sleep(0.05)
-        # select
-        for i in range(len(times)):
-            if times[i] < last_time:
-                cut = i
-                break
-        comments = comments[:cut]
-        times = times[:cut]
-        names = names[:cut]
-        update += len(times)
+    # select
+    for i in range(len(times)):
+        if times[i] < last_time:
+            cut = i
+            break
+    comments = comments[:cut]
+    times = times[:cut]
+    names = names[:cut]
+    update += len(times)
     number += 1
                 
     # mysql
