@@ -93,19 +93,3 @@ print('Total {0:.1f} min !'.format((end-begin)/60))
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
