@@ -56,23 +56,24 @@ for itemId in item_id:
     times = []
     names = []
     scores = []
+    pages = []
     for i in range(total_pages):
-        page = i
         url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=6&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
         myweb = rq.get(url)
-        comment_time_name = re.findall('\"guid\":(\".*?\")\,\"referenceName\"', myweb.text)
+        comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', myweb.text)
         item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
         score = re.findall('\"referenceType\":\"Product\"(.*?)\,\"status\"', myweb.text)
         for mes in comment_time_name:
             comment = re.findall('\"content\":(\".*?\")\,\"creationTime\"', mes)
             co_time = re.findall('\"creationTime\":(\".*?\")\,\"', mes)
-            for num in range(len(comment)):
-                comments.append(comment[num][1:-1])
-                times.append(co_time[num][1:-1])
-                names.append(item_name[num][1:-1])
-                scores.append(score[num][-1])
-                count += 1
-                print('get No. {0} in item {1} total {2}'.format(count, number, length))
+            comments.append(comment[0][1:-1])
+            times.append(co_time[0][1:-1])
+        for num in range(len(score)):
+            names.append(item_name[num][1:-1])
+            scores.append(score[num][-1])
+            pages.append(i)
+            count += 1
+            print('get No. {0} in item {1} total {2}'.format(count, number, length))
         time.sleep(0.05)
     number += 1
     # mysql
@@ -83,7 +84,7 @@ for itemId in item_id:
     for i in range(len(comments)):
         cursor = con.cursor()
         query = ('insert into table' + str(itemId) + '(name, item, page, time, score, comments) values (%s, %s, %s, %s, %s, %s)')
-        cursor.execute(query, (names[i], itemId, page, times[i], scores[i], comments[i]))
+        cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], comments[i]))
         con.commit()
         cursor.close()
 # =============================================================================
