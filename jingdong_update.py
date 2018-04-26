@@ -75,30 +75,31 @@ for itemId in item_id:
             print('get No. {0} in item {1} total {2}'.format(count, number, length))
         time.sleep(0.05)
     # select
-    for i in range(len(times)):
-        if times[i] < last_time:
-            cut = i
-            break
-    comments = comments[:cut]
-    times = times[:cut]
-    names = names[:cut]
-    scores = scores[:cut]
-    pages = pages[:cut]
-    update += len(times)
-    number += 1
+    if len(times) != 0:
+        for i in range(len(times)):
+            if times[i] < last_time:
+                cut = i
+                break
+        comments = comments[:cut]
+        times = times[:cut]
+        names = names[:cut]
+        scores = scores[:cut]
+        pages = pages[:cut]
+        update += len(times)
+        number += 1
                 
     # mysql
-    cursor = con.cursor()
-    item_table = 'create table table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,comments varchar(10000000))' 
-    cursor.execute(item_table)
-    cursor.close()
-    for i in range(len(comments)):
         cursor = con.cursor()
-        query = ('insert into table' + str(itemId) + '(name, item, page, time, score, comments) values (%s, %s, %s, %s, %s, %s)')
-        cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], comments[i]))
-        con.commit()
+        item_table = 'create table table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,comments varchar(10000000))' 
+        cursor.execute(item_table)
         cursor.close()
-    num += 1
+        for i in range(len(comments)):
+            cursor = con.cursor()
+            query = ('insert into table' + str(itemId) + '(name, item, page, time, score, comments) values (%s, %s, %s, %s, %s, %s)')
+            cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], comments[i]))
+            con.commit()
+            cursor.close()
+    
 # =============================================================================
 #     cursor = con.cursor()
 #     delete ='delete from table' + str(itemId) + ' where comments in (select comments from table' + str(itemId) + ' group by comments having count(comments)>1) and comments not in (select min(time) from table' + str(itemId) + 'group by comments having count(comments)>1)' 
