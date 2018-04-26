@@ -108,7 +108,7 @@ for itemId in item_id:
 # =============================================================================
 con.close()
 end = time.time()
-print('Total {0:.1f} min , update {1} !'.format((end-begin)/60), update)
+print('Total {0:.1f} min , update {1} !'.format((end-begin)/60, update))
 
 with open('/Users/zt/Desktop/xiaomi_update.txt', 'a') as ud:
     ud.writelines(str(update) + '\n')
