@@ -17,12 +17,16 @@ con = sql.connect(host='localhost', user='root',passwd='',db='del',charset='utf8
 find_name = 'select table_name from information_schema.tables where table_schema=\'del\' and table_type=\'base table\';'
 table_names = list(pd.read_sql(find_name, con)['table_name'])
 for name in table_names:
-    cursor = con.cursor()
-    delete = 'delete from ' + name + ' where comments in (select cm from (select comments as cm from ' + name + ' group by comments having count(*)>1) as a) and time not in (select mt from (select max(time) as mt from '+ name +' group by comments having count(*)>1) as b);'
-    cursor.execute(delete)
-    cursor.close()
+    rid = []
+    ifo = 'select * from ' + name
+    data = pd.read_sql(ifo, con)
+    ori = len(data)
+    for i in range(ori):
+        if i != ori-1:
+            if str(data[i:i+1]['comments'].values[0]) == str(data[i+1:i+2]['comments'].values[0]):
+                rid.append(i+1)
+    data = data.drop(rid)
+   
     
     
-    """
-    去重会不会导致大量信息损失？是否应该修改为去除相邻行重复？
-    """
+  
