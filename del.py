@@ -22,6 +22,7 @@ for name in table_names:
     cursor.execute(delete)
     cursor.close()
     
+    
     """
     去重会不会导致大量信息损失？是否应该修改为去除相邻行重复？
     """
