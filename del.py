@@ -12,9 +12,10 @@ import pymysql as sql
 import pandas as pd
 
 # connect mysql
-con = sql.connect(host='localhost', user='root',passwd='',db='del',charset='utf8')
+con = sql.connect(host='localhost', user='root',passwd='',db='huawei',charset='utf8')
+sat = {}
 
-find_name = 'select table_name from information_schema.tables where table_schema=\'del\' and table_type=\'base table\';'
+find_name = 'select table_name from information_schema.tables where table_schema=\'huawei\' and table_type=\'base table\';'
 table_names = list(pd.read_sql(find_name, con)['table_name'])
 for name in table_names:
     rid = []
@@ -26,7 +27,8 @@ for name in table_names:
             if str(data[i:i+1]['comments'].values[0]) == str(data[i+1:i+2]['comments'].values[0]):
                 rid.append(i+1)
     data = data.drop(rid)
+    sat[name] = data
    
-    
+con.close() 
     
   
