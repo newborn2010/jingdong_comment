@@ -21,3 +21,7 @@ for name in table_names:
     delete = 'delete from ' + name + ' where comments in (select cm from (select comments as cm from ' + name + ' group by comments having count(*)>1) as a) and time not in (select mt from (select max(time) as mt from '+ name +' group by comments having count(*)>1) as b);'
     cursor.execute(delete)
     cursor.close()
+    
+    """
+    去重会不会导致大量信息损失？是否应该修改为去除相邻行重复？
+    """
