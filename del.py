@@ -14,7 +14,7 @@ from sqlalchemy import create_engine
 import time 
 
 begin = time.time()
-brands = ['xiaomi', 'huawei', 'iphone']
+brands = ['xiaomi', 'huawei', 'iphone', 'samsung']
 for brand in brands:
     all_records = 0
     rid_number = []
