@@ -32,18 +32,6 @@ for page in pages:
 item_id = list(set(all_id))
 length = len(item_id)
 
-# check
-# =============================================================================
-# count = 0
-# browser = webdriver.Chrome()
-# for a in id:
-#     url = 'https://item.jd.com/' + str(a) + '.html'
-#     browser.get(url)
-#     count += 1
-#     browser.execute_script('window.open()')
-#     browser.switch_to_window(browser.window_handles[count])
-# =============================================================================
-
 # connect mysql
 con = sql.connect(host='localhost', user='root',passwd='',db='xiaomi',charset='utf8')
 
@@ -74,7 +62,6 @@ for itemId in item_id:
             pages.append(i)
             count += 1
             print('get No. {0} in item {1} total {2}'.format(count, number, length))
-        time.sleep(0.05)
     number += 1
     # mysql
     cursor = con.cursor()
@@ -87,32 +74,7 @@ for itemId in item_id:
         cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], comments[i]))
         con.commit()
         cursor.close()
-# =============================================================================
-#     cursor = con.cursor()
-#     delete ='delete from table' + str(itemId) + ' where comments in (select comments from table' + str(itemId) + ' group by comments having count(comments)>1) and comments not in (select min(time) from table' + str(itemId) + 'group by comments having count(comments)>1)' 
-#     cursor.execute(delete)
-#     cursor.close()
-# =============================================================================
 con.close()
 end = time.time()
 print('Total {0:.1f} min !'.format((end-begin)/60))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
