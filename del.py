@@ -14,6 +14,7 @@ from sqlalchemy import create_engine
 import time 
 
 begin = time.time()
+all_records = 0
 brands = ['xiaomi']#, 'huawei', 'iphone']
 for brand in brands:
     # connect mysql
@@ -38,7 +39,9 @@ for brand in brands:
                 if str(data[i:i+1]['comments'].values[0]) == str(data[i+1:i+2]['comments'].values[0]):
                     rid.append(i+1)
         data = data.drop(rid)
+        all_records += len(data)
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False)  
 end = time.time()
 print('Total {0:.3f} min !'.format((end-begin)/60))  
+print('we have {}'.format(all_records))
   
