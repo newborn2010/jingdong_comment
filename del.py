@@ -44,7 +44,7 @@ for brand in brands:
         all_records += len(data)
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
     print('we have {0} in {1}'.format(all_records, brand))
-    print('we delete {} from {1}'.format(len(rid_number), brand))
+    print('we delete {0} from {1}'.format(len(rid_number), brand))
 end = time.time()
 print('Total {0:.3f} min !'.format((end-begin)/60))  
 
