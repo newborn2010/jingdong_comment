@@ -14,10 +14,10 @@ from sqlalchemy import create_engine
 import time 
 
 begin = time.time()
-all_records = 0
-rid_number = []
-brands = ['xiaomi']#, 'huawei', 'iphone']
+brands = ['xiaomi', 'huawei', 'iphone']
 for brand in brands:
+    all_records = 0
+    rid_number = []
     # connect mysql
     db_info = {'user': 'root',
                'password': '',
@@ -42,9 +42,10 @@ for brand in brands:
         data = data.drop(rid)
         rid_number.append(len(rid))
         all_records += len(data)
-        pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False)  
+        pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
+    print('we have {0} in {1}'.format(all_records, brand))
+    print('we delete {} from {1}'.format(len(rid_number), brand))
 end = time.time()
 print('Total {0:.3f} min !'.format((end-begin)/60))  
-print('we have {}'.format(all_records))
-print('we delete {}'.format(len(rid_number)))
+
   
