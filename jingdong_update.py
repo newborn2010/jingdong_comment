@@ -26,10 +26,11 @@ with open('/Users/zt/Desktop/time.txt','w') as nt:
     nt.write(end_time)
     
 # get id
-brands = ['xiaomi', 'huawei', 'iphone']
+brands = ['xiaomi', 'huawei', 'iphone', 'samsung']
 urls = {'xiaomi': ['https://mi.jd.com/view_search-442829-1000004123-1000004123-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
         'huawei': ['https://huawei.jd.com/view_search-466323-1000004259-1000004259-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
-        'iphone': ['https://mall.jd.com/advance_search-394872-1000000127-1000000127-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&other=&isRedisstore=0']}
+        'iphone': ['https://mall.jd.com/advance_search-394872-1000000127-1000000127-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&other=&isRedisstore=0'],
+        'samsung': ['https://samsung.jd.com/view_search-418163-1000003443-1000003443-0-2-0-0-1-', '-60.html?isGlobalSearch=0&other=&isRedisstore=0']}
 begin = time.time()
 updates = []
 for brand in brands:
