@@ -45,12 +45,14 @@ for itemId in item_id:
             level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[1]
             aftercomment = re.findall('\"content\":(\".*?\"),\"discuss', level_aftercomment)
             level = level_aftercomment.rstrip(',\"afterUserComment\":' + re.findall('\"afterUserComment\":(.*?)', level_aftercomment))[1:-1]
+            pic = re.findall('\"images\":(.*?),\"showOrderComment', mess[0]).count('imgUrl')
             days.append(day)
             goods.append(good)
             bads.append(bad)
             exps.append(exp)
             aftercomments.append(aftercomment)
-            levels.append(level)            
+            levels.append(level)      
+            pic_num.append(str(pic))
             for mes in comment_time_name:
                 comment = re.findall('\"content\":(\".*?\")\,\"creationTime\"', mes)
                 co_time = re.findall('\"creationTime\":(\".*?\")\,\"', mes)
