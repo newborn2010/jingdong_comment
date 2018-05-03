@@ -41,11 +41,11 @@ for itemId in item_id:
             good_bad = re.findall('\"usefulVoteCount\":(.*?),\"uselessVoteCount\":(.*?),\"userImage', mess[0])
             good = good_bad[0][0]
             bad = good_bad[0][1]
-            exp = re.findall('\"userExpValue\":(.*?),\"productSales', mess[0])[0]
+            exp = re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0])[0][1]
             level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[0][1]
             aftercomment = re.findall('\"content\":(\".*?\"),\"discuss', level_aftercomment)
             level = level_aftercomment[1:level_aftercomment.find('\"',1)]
-            pic = re.findall('\"images\":(.*?),\"showOrderComment', mess[0])[0].count('jShow')
+            pic = ''.join(re.findall('\"images\":(.*?),\"showOrderComment', mess[0])).count('jShow')
             goods.append(good)
             bads.append(bad)
             exps.append(exp)
