@@ -27,6 +27,7 @@ for itemId in item_id:
     exps = []
     aftercomments = []
     levels = []
+    pic_num = []
     for i in range(total_pages):
         url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=5&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
         myweb = rq.get(url)
@@ -37,8 +38,9 @@ for itemId in item_id:
             item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', mess[0])
             score = re.findall('\"referenceType\":\"Product\"(.*?)\,\"status\"', mess[0])
             day = re.findall('\"days\":(.*?)', mess[0])
-            good = re.findall('\"usefulVoteCount\":(.*?),\"useless', mess[0])
-            bad = re.findall('\"uselessVoteCount\":(.*?),\"userLevelId', mess[0])
+            good_bad = re.findall('\"usefulVoteCount\":(.*?),\"uselessVoteCount\":(.*?),\"useImage', mess[0])
+            good = good_bad[0]
+            bad = good_bad[1]
             exp = re.findall('\"userExpValue\":(.*?),\"productSales', mess[0])
             level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[1]
             aftercomment = re.findall('\"content\":(\".*?\"),\"discuss', level_aftercomment)
