@@ -22,6 +22,10 @@ for itemId in item_id:
     pages = []
     days = []
     afterdays = []
+    goods = []
+    bads = []
+    exps = []
+    levels = []
     for i in range(total_pages):
         url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=5&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
         myweb = rq.get(url)
@@ -31,6 +35,15 @@ for itemId in item_id:
             comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', mess[0])
             item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', mess[0])
             score = re.findall('\"referenceType\":\"Product\"(.*?)\,\"status\"', mess[0])
+            day = re.findall('\"days\":(.*?)', mess[0])
+            good = re.findall('\"usefulVoteCount\":(.*?),\"useless', mess[0])
+            bad = re.findall('\"uselessVoteCount\":(.*?),\"userLevelId', mess[0])
+            exp = re.findall('\"userExpValue\":(.*?),\"productSales', mess[0])
+            level = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[1]
+            days.append(day)
+            goods.append(good)
+            bads.append(bad)
+            exps.append(exp)
             for mes in comment_time_name:
                 comment = re.findall('\"content\":(\".*?\")\,\"creationTime\"', mes)
                 co_time = re.findall('\"creationTime\":(\".*?\")\,\"', mes)
