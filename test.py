@@ -25,6 +25,7 @@ for itemId in item_id:
     goods = []
     bads = []
     exps = []
+    aftercomments = []
     levels = []
     for i in range(total_pages):
         url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=5&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
@@ -39,11 +40,15 @@ for itemId in item_id:
             good = re.findall('\"usefulVoteCount\":(.*?),\"useless', mess[0])
             bad = re.findall('\"uselessVoteCount\":(.*?),\"userLevelId', mess[0])
             exp = re.findall('\"userExpValue\":(.*?),\"productSales', mess[0])
-            level = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[1]
+            level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[1]
+            aftercomment = re.findall('\"content\":(\".*?\"),\"discuss', level_aftercomment)
+            level = level_aftercomment.rstrip(',\"afterUserComment\":' + re.findall('\"afterUserComment\":(.*?)', level_aftercomment))[1:-1]
             days.append(day)
             goods.append(good)
             bads.append(bad)
             exps.append(exp)
+            aftercomments.append(aftercomment)
+            levels.append(level)            
             for mes in comment_time_name:
                 comment = re.findall('\"content\":(\".*?\")\,\"creationTime\"', mes)
                 co_time = re.findall('\"creationTime\":(\".*?\")\,\"', mes)
