@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 import re
 import requests as rq
 
-item_id = [7333897]
+item_id = [7348345]
 for itemId in item_id:
     total_pages = 1
     comments = []
@@ -24,12 +24,12 @@ for itemId in item_id:
     afterdays = []
     goods = []
     bads = []
-    exps = [] #
+    exps = [] 
     aftercomments = []
-    levels = [] #
+    levels = [] 
     pic_num = [] #
     for i in range(total_pages):
-        url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=5&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
+        url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=5&page=' + str(2) + '&pageSize=10&isShadowSku=0&fold=1'
         myweb = rq.get(url)
         comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', myweb.text)
         item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
@@ -43,9 +43,9 @@ for itemId in item_id:
             bad = good_bad[0][1]
             exp = re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0])[0][1]
             level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[0][1]
-            aftercomment = re.findall('\"content\":(\".*?\"),\"discuss', level_aftercomment)
+            aftercomment = ''.join(re.findall('\"content\":\"(.*?)\",\"discuss', level_aftercomment))
             level = level_aftercomment[1:level_aftercomment.find('\"',1)]
-            pic = ''.join(re.findall('\"images\":(.*?),\"showOrderComment', mess[0])).count('jShow')
+            pic = ''.join(re.findall('\"images\":(.*?),\"showOrderComment', mess[0])).count('jShow') + ''.join(re.findall('\"afterImages\":(.*?)]', mess[0])).count('jShow')
             goods.append(good)
             bads.append(bad)
             exps.append(exp)
