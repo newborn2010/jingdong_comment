@@ -56,20 +56,45 @@ for brand in brands:
     number = 1
     update = 0
     for itemId in item_id:
-        total_pages = 100
+        total_pages = 200
         count = 0
         comments = []
         times = []
         names = []
         scores = []
         pages = []
+        days = []
+        afterdays = []
+        goods = []
+        bads = []
+        exps = [] 
+        aftercomments = []
+        levels = [] 
+        pic_num = [] 
         for i in range(total_pages):
-            page = str(i+1)
             url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=6&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
             myweb = rq.get(url)
             comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', myweb.text)
             item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
             score = re.findall('\"referenceType\":\"Product\"(.*?)\,\"status\"', myweb.text)
+            ifo = re.findall('{\"id\":(.*?),\"afterDays\":(.*?)}', myweb.text)
+            afterday = re.findall('\"afterDays\":(.*?)}',myweb.text)
+            day = re.findall('\"days\":(.*?),\"afterDays\"', myweb.text)
+            for mess in ifo:
+                good_bad = re.findall('\"usefulVoteCount\":(.*?),\"uselessVoteCount\":(.*?),\"userImage', mess[0])
+                good = good_bad[0][0]
+                bad = good_bad[0][1]
+                exp = re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0])[0][1]
+                level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[0][1]
+                aftercomment = ''.join(re.findall('\"content\":\"(.*?)\",\"discuss', level_aftercomment))
+                level = level_aftercomment[1:level_aftercomment.find('\"',1)]
+                pic = ''.join(re.findall('\"images\":(.*?),\"showOrderComment', mess[0])).count('jShow') + ''.join(re.findall('\"afterImages\":(.*?)]', mess[0])).count('jShow')
+                goods.append(good)
+                bads.append(bad)
+                exps.append(exp)
+                aftercomments.append(aftercomment)
+                levels.append(level)      
+                pic_num.append(str(pic))
             for mes in comment_time_name:
                 comment = re.findall('\"content\":(\".*?\")\,\"creationTime\"', mes)
                 co_time = re.findall('\"creationTime\":(\".*?\")\,\"', mes)
@@ -78,6 +103,8 @@ for brand in brands:
             for num in range(len(score)):
                 names.append(item_name[num][1:-1])
                 scores.append(score[num][-1])
+                afterdays.append(afterday[num])
+                days.append(day[num])
                 pages.append(i)
                 count += 1
                 print('get No. {0} in item {1} total {2} brand {3}'.format(count, number, length, brand))
@@ -93,25 +120,33 @@ for brand in brands:
             names = names[:cut]
             scores = scores[:cut]
             pages = pages[:cut]
+            days = days[:cut]
+            afterdays = afterdays[:cut]
+            goods = goods[:cut]
+            bads = bads[:cut]
+            exps = exps[:cut]
+            aftercomments = aftercomments[:cut]
+            levels = levels[:cut]
+            pic_num = pic_num[:cut]
             update += len(times)
             updates.append(update)
             number += 1
                 
             # mysql
             cursor = con.cursor()
-            item_table = 'create table if not exists table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,comments varchar(10000000))' 
+            item_table = 'create table table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
             cursor.execute(item_table)
             cursor.close()
             for i in range(len(comments)):
                 cursor = con.cursor()
-                query = ('insert into table' + str(itemId) + '(name, item, page, time, score, comments) values (%s, %s, %s, %s, %s, %s)')
-                cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], comments[i]))
+                query = ('insert into table' + str(itemId) + '(name, item, page, time, score, day, after_day, good, bad, exp, pic, level, comments, after_comments) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)')
+                cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], days[i], afterdays[i], goods[i], bads[i], exps[i], pic_num[i], levels[i], comments[i], aftercomments[i]))
                 con.commit()
-                cursor.close()          
+                cursor.close()         
     con.close()
 end = time.time()
 print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} !'.format((end-begin)/60, updates[0], updates[1], update[2]))
-with open('/Users/zt/Desktop/xiaomi_update.txt', 'a') as ud:
+with open('/Users/zt/Desktop/update.txt', 'a') as ud:
     ud.writelines(str(updates) + '\n')
     
 
