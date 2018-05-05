@@ -70,7 +70,7 @@ for itemId in item_id:
                 exp = '0'
             else:
                 exp = re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0])[0][1]
-            level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[0][1]
+            level_aftercomment = re.findall('userImgFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[0][1]
             aftercomment = ''.join(re.findall('\"content\":\"(.*?)\",\"discuss', level_aftercomment))
             level = level_aftercomment[1:level_aftercomment.find('\"',1)]
             pic = ''.join(re.findall('\"images\":(.*?),\"showOrderComment', mess[0])).count('jShow') + ''.join(re.findall('\"afterImages\":(.*?)]', mess[0])).count('jShow')
@@ -108,6 +108,5 @@ for itemId in item_id:
 con.close()
 end = time.time()
 print('Total {0:.1f} min !'.format((end-begin)/60))
-
 
 
