@@ -84,8 +84,11 @@ for brand in brands:
                 good_bad = re.findall('\"usefulVoteCount\":(.*?),\"uselessVoteCount\":(.*?),\"userImage', mess[0])
                 good = good_bad[0][0]
                 bad = good_bad[0][1]
-                exp = re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0])[0][1]
-                level_aftercomment = re.findall('anonymousFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[0][1]
+                if re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0]) == []:
+                    exp = '0'
+                else:
+                    exp = re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0])[0][1]
+                level_aftercomment = re.findall('userImgFlag\":(.*?),\"userLevelName\":(.*?),\"plusAvailable\"', mess[0])[0][1]
                 aftercomment = ''.join(re.findall('\"content\":\"(.*?)\",\"discuss', level_aftercomment))
                 level = level_aftercomment[1:level_aftercomment.find('\"',1)]
                 pic = ''.join(re.findall('\"images\":(.*?),\"showOrderComment', mess[0])).count('jShow') + ''.join(re.findall('\"afterImages\":(.*?)]', mess[0])).count('jShow')
@@ -134,7 +137,7 @@ for brand in brands:
                 
             # mysql
             cursor = con.cursor()
-            item_table = 'create table table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
+            item_table = 'create table if not exists table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
             cursor.execute(item_table)
             cursor.close()
             for i in range(len(comments)):
