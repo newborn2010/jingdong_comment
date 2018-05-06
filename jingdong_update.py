@@ -44,8 +44,8 @@ for brand in brands:
         browser.close()
         ifo = re.findall('item.jd.com\/(.*?).html', html)
         for i in ifo:
-            all_id.append(int(i))
-
+            if i != '{sku}':
+                all_id.append(int(i))
     item_id = list(set(all_id))
     length = len(item_id)
 
