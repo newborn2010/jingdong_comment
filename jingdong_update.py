@@ -44,7 +44,7 @@ for brand in brands:
         browser.close()
         ifo = re.findall('item.jd.com\/(.*?).html', html)
         for i in ifo:
-            if i != '{sku}':
+            if i.isdigit():
                 all_id.append(int(i))
     item_id = list(set(all_id))
     length = len(item_id)
@@ -132,12 +132,11 @@ for brand in brands:
             levels = levels[:cut]
             pic_num = pic_num[:cut]
             update += len(times)
-            updates.append(update)
             number += 1
                 
             # mysql
             cursor = con.cursor()
-            item_table = 'create table if not exists table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
+            item_table = 'create table if not exists table' + str(itemId) + '( name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
             cursor.execute(item_table)
             cursor.close()
             for i in range(len(comments)):
@@ -147,8 +146,10 @@ for brand in brands:
                 con.commit()
                 cursor.close()         
     con.close()
+    updates.append(update)
+    time.sleep(300)
 end = time.time()
-print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} !'.format((end-begin)/60, updates[0], updates[1], update[2]))
+print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} !'.format((end-begin)/60, updates[0], updates[1], updates[2]))
 with open('/Users/zt/Desktop/update.txt', 'a') as ud:
     ud.writelines(str(updates) + '\n')
     
