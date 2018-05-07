@@ -96,7 +96,7 @@ for itemId in item_id:
     number += 1
     # mysql
     cursor = con.cursor()
-    item_table = 'create table table' + str(itemId) + '(id int not null auto_increment primary key, name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
+    item_table = 'create table table' + str(itemId) + '( name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
     cursor.execute(item_table)
     cursor.close()
     for i in range(len(comments)):
