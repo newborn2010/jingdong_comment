@@ -149,7 +149,7 @@ for brand in brands:
     updates.append(update)
     time.sleep(300)
 end = time.time()
-print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} !'.format((end-begin)/60, updates[0], updates[1], updates[2]))
+print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} sumsang update {4} !'.format((end-begin)/60, updates[0], updates[1], updates[2], updates[3]))
 with open('/Users/zt/Desktop/update.txt', 'a') as ud:
     ud.writelines(str(updates) + '\n')
     
