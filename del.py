@@ -14,7 +14,7 @@ from sqlalchemy import create_engine
 import time 
 
 begin = time.time()
-brands = ['xiaomi', 'huawei', 'iphone', 'samsung']
+brands = ['drinks']#['xiaomi', 'huawei', 'iphone', 'samsung']
 for brand in brands:
     all_records = 0
     rid_number = []
@@ -32,6 +32,14 @@ for brand in brands:
         rid = []
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
+        temp = 'create table temp as select distinct * from ' + name
+        drop = 'drop table ' + name
+        rename = 'rename table temp to ' + name
+        cursor = con.cursor()
+        cursor.execute(temp)
+        cursor.execute(drop)
+        cursor.execute(rename)
+        cursor.close()
         data = pd.read_sql(ifo, con)
         con.close() 
         ori = len(data)
