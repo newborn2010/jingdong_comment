@@ -26,11 +26,12 @@ with open('/Users/zt/Desktop/time.txt','w') as nt:
     nt.write(end_time)
     
 # get id
-brands = ['xiaomi', 'huawei', 'iphone', 'samsung']
+brands = ['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 urls = {'xiaomi': ['https://mi.jd.com/view_search-442829-1000004123-1000004123-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
         'huawei': ['https://huawei.jd.com/view_search-466323-1000004259-1000004259-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
         'iphone': ['https://mall.jd.com/advance_search-394872-1000000127-1000000127-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&other=&isRedisstore=0'],
-        'samsung': ['https://samsung.jd.com/view_search-418163-1000003443-1000003443-0-2-0-0-1-', '-60.html?isGlobalSearch=0&other=&isRedisstore=0']}
+        'samsung': ['https://samsung.jd.com/view_search-418163-1000003443-1000003443-0-2-0-0-1-', '-60.html?isGlobalSearch=0&other=&isRedisstore=0'],
+        'honor': ['https://honor.jd.com/view_search-394032-1000000904-1000000904-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0']}
 begin = time.time()
 updates = []
 for brand in brands:
@@ -149,7 +150,7 @@ for brand in brands:
     updates.append(update)
     time.sleep(300)
 end = time.time()
-print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} sumsang update {4} !'.format((end-begin)/60, updates[0], updates[1], updates[2], updates[3]))
+print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} sumsang update {4} honor update {5}!'.format((end-begin)/60, updates[0], updates[1], updates[2], updates[3], updates[4]))
 with open('/Users/zt/Desktop/update.txt', 'a') as ud:
     ud.writelines(str(updates) + '\n')
     
