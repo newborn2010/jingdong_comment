@@ -119,19 +119,21 @@ for brand in brands:
                 if times[i] < last_time:
                     cut = i
                     break
-            comments = comments[:cut]
-            times = times[:cut]
-            names = names[:cut]
-            scores = scores[:cut]
-            pages = pages[:cut]
-            days = days[:cut]
-            afterdays = afterdays[:cut]
-            goods = goods[:cut]
-            bads = bads[:cut]
-            exps = exps[:cut]
-            aftercomments = aftercomments[:cut]
-            levels = levels[:cut]
-            pic_num = pic_num[:cut]
+                cut = 'no'
+            if type(cut) == type(1):
+                comments = comments[:cut]
+                times = times[:cut]
+                names = names[:cut]
+                scores = scores[:cut]
+                pages = pages[:cut]
+                days = days[:cut]
+                afterdays = afterdays[:cut]
+                goods = goods[:cut]
+                bads = bads[:cut]
+                exps = exps[:cut]
+                aftercomments = aftercomments[:cut]
+                levels = levels[:cut]
+                pic_num = pic_num[:cut]
             update += len(times)
             number += 1
                 
@@ -144,8 +146,8 @@ for brand in brands:
                 cursor = con.cursor()
                 query = ('insert into table' + str(itemId) + '(name, item, page, time, score, day, after_day, good, bad, exp, pic, level, comments, after_comments) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)')
                 cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], days[i], afterdays[i], goods[i], bads[i], exps[i], pic_num[i], levels[i], comments[i], aftercomments[i]))
-                con.commit()
-                cursor.close()         
+            con.commit()
+            cursor.close()         
     con.close()
     updates.append(update)
     time.sleep(300)
