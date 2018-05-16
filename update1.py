@@ -26,7 +26,7 @@ with open('/Users/zt/Desktop/time.txt','w') as nt:
     nt.write(end_time)
     
 # get id
-brands = ['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
+brands = ['xiaomi', 'huawei', 'iphone'] #'xiaomi', 'huawei', 'iphone','samsung', 'honor'
 urls = {'xiaomi': ['https://mi.jd.com/view_search-442829-1000004123-1000004123-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
         'huawei': ['https://huawei.jd.com/view_search-466323-1000004259-1000004259-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
         'iphone': ['https://mall.jd.com/advance_search-394872-1000000127-1000000127-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&other=&isRedisstore=0'],
@@ -119,19 +119,21 @@ for brand in brands:
                 if times[i] < last_time:
                     cut = i
                     break
-            comments = comments[:cut]
-            times = times[:cut]
-            names = names[:cut]
-            scores = scores[:cut]
-            pages = pages[:cut]
-            days = days[:cut]
-            afterdays = afterdays[:cut]
-            goods = goods[:cut]
-            bads = bads[:cut]
-            exps = exps[:cut]
-            aftercomments = aftercomments[:cut]
-            levels = levels[:cut]
-            pic_num = pic_num[:cut]
+                cut = 'no'
+            if type(cut) == type(1):
+                comments = comments[:cut]
+                times = times[:cut]
+                names = names[:cut]
+                scores = scores[:cut]
+                pages = pages[:cut]
+                days = days[:cut]
+                afterdays = afterdays[:cut]
+                goods = goods[:cut]
+                bads = bads[:cut]
+                exps = exps[:cut]
+                aftercomments = aftercomments[:cut]
+                levels = levels[:cut]
+                pic_num = pic_num[:cut]
             update += len(times)
             number += 1
                 
@@ -150,7 +152,7 @@ for brand in brands:
     updates.append(update)
     time.sleep(300)
 end = time.time()
-print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3} sumsang update {4} honor update {5}!'.format((end-begin)/60, updates[0], updates[1], updates[2], updates[3], updates[4]))
+print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3}!'.format((end-begin)/60, updates[0], updates[1], updates[2]))
 with open('/Users/zt/Desktop/update.txt', 'a') as ud:
     ud.writelines(str(updates) + '\n')
     
