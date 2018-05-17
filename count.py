@@ -31,7 +31,7 @@ for brand in brands:
         con.close() 
         ori = len(data)
         all_records += len(data)
-        al += all_records
+    al += all_records
     print('we have {0} in {1}'.format(all_records, brand))
 end = time.time()
 print('Total {0} in {1:.3f} min !'.format(al, (end-begin)/60))  
