@@ -14,7 +14,7 @@ from sqlalchemy import create_engine
 import time 
 
 begin = time.time()
-brands = ['drinks']#['xiaomi', 'huawei', 'iphone', 'samsung']
+brands = ['jd']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 for brand in brands:
     all_records = 0
     rid_number = []
@@ -35,10 +35,12 @@ for brand in brands:
         temp = 'create table temp as select distinct * from ' + name
         drop = 'drop table ' + name
         rename = 'rename table temp to ' + name
+        del_error = 'delete from ' + name + ' where '
         cursor = con.cursor()
         cursor.execute(temp)
         cursor.execute(drop)
         cursor.execute(rename)
+        con.commit()
         cursor.close()
         data = pd.read_sql(ifo, con)
         con.close() 
@@ -51,8 +53,8 @@ for brand in brands:
         rid_number.append(len(rid))
         all_records += len(data)
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
-    print('we have {0} in {1}'.format(all_records, brand))
-    print('we delete {0} from {1}'.format(len(rid_number), brand))
+    print('we have {0} in {1} now !'.format(all_records, brand))
+    print('we delete {0} from {1} !'.format(sum(rid_number), brand))
 end = time.time()
 print('Total {0:.3f} min !'.format((end-begin)/60))  
 
