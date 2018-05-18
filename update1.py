@@ -142,12 +142,12 @@ for brand in brands:
             item_table = 'create table if not exists table' + str(itemId) + '( name varchar(1000),item int, page int, time datetime,score int,day int,after_day int,good int, bad int,exp int,pic int, level varchar(30),comments varchar(10000000),after_comments varchar(10000000))' 
             cursor.execute(item_table)
             cursor.close()
+            cursor = con.cursor()
             for i in range(len(comments)):
-                cursor = con.cursor()
                 query = ('insert into table' + str(itemId) + '(name, item, page, time, score, day, after_day, good, bad, exp, pic, level, comments, after_comments) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)')
                 cursor.execute(query, (names[i], itemId, pages[i], times[i], scores[i], days[i], afterdays[i], goods[i], bads[i], exps[i], pic_num[i], levels[i], comments[i], aftercomments[i]))
-                con.commit()
-                cursor.close()         
+            con.commit()
+            cursor.close()         
     con.close()
     updates.append(update)
     time.sleep(300)
