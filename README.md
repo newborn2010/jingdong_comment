@@ -25,3 +25,5 @@
 (5.17 更新：更新 del ，增加删除主键 del_id ，修改了 count 以正确计数.）
 
 (5.19 更新：对词向量训练的尝试）
+
+(5.20 更新：更新对 requests 请求的 headers，proxy，connect，更新了 timeout)
