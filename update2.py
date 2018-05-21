@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun May 13 10:58:50 2018
+Created on Sun May 20 23:35:07 2018
 
 @author: Rorschach
 @mail: 188581221@qq.com
@@ -15,8 +15,18 @@ import requests as rq
 import time
 import pymysql as sql
 import datetime
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
-rq.adapters.DEFAULT_RETRIES = 15
+
+session = rq.Session()
+retry = Retry(connect=10, backoff_factor=0.5)
+adapter = HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
+
+
+rq.adapters.DEFAULT_RETRIES = 25
 
 # import last time
 with open('/Users/zt/Desktop/time2.txt','r') as lt:
@@ -76,10 +86,10 @@ for brand in brands:
         pic_num = [] 
         for i in range(total_pages):
             url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=6&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
-            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36', 
+            headers = {'User-Agent': 'python-requests/2.18.4', 
                        'Connection': 'close'}
             proxy = {'http': '33.33.33.10:8118'}
-            myweb = rq.get(url, headers=headers, proxies=proxy, timeout=30)
+            myweb = session.get(url, headers=headers, timeout=30, proxies=proxy)
             comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', myweb.text)
             item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
             score = re.findall('\"referenceType\":\"Product\"(.*?)\,\"status\"', myweb.text)
