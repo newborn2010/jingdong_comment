@@ -17,6 +17,7 @@ import pymysql as sql
 import datetime
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+import random 
 
 
 session = rq.Session()
@@ -88,8 +89,8 @@ for brand in brands:
             url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=6&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
             headers = {'User-Agent': 'python-requests/2.18.4', 
                        'Connection': 'close'}
-            proxy = {'http': '33.33.33.10:8118'}
-            myweb = session.get(url, headers=headers, timeout=30, proxies=proxy)
+            proxy = ['33.33.33.10:8118', '125.46.0.62', '61.135.217.7']
+            myweb = session.get(url, headers=headers, timeout=30, proxies={'http': random.choice(proxy)})
             comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', myweb.text)
             item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
             score = re.findall('\"referenceType\":\"Product\"(.*?)\,\"status\"', myweb.text)
