@@ -15,8 +15,17 @@ import requests as rq
 import time
 import pymysql as sql
 import datetime
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
-rq.adapters.DEFAULT_RETRIES = 20 
+
+session = rq.Session()
+retry = Retry(connect=10, backoff_factor=0.5)
+adapter = HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
+
+rq.adapters.DEFAULT_RETRIES = 25
 
 # import last time
 with open('/Users/zt/Desktop/time.txt','r') as lt:
@@ -28,7 +37,7 @@ with open('/Users/zt/Desktop/time.txt','w') as nt:
     nt.write(end_time)
     
 # get id
-brands = ['huawei', 'iphone'] #'xiaomi', 'huawei', 'iphone','samsung', 'honor'
+brands = ['xiaomi', 'huawei', 'iphone'] #'xiaomi', 'huawei', 'iphone','samsung', 'honor'
 urls = {'xiaomi': ['https://mi.jd.com/view_search-442829-1000004123-1000004123-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
         'huawei': ['https://huawei.jd.com/view_search-466323-1000004259-1000004259-0-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&isGlobalSearch=0&other=&isRedisstore=0'],
         'iphone': ['https://mall.jd.com/advance_search-394872-1000000127-1000000127-2-0-0-1-', '-60.html?keyword=%25E6%2589%258B%25E6%259C%25BA&other=&isRedisstore=0'],
@@ -78,10 +87,10 @@ for brand in brands:
         pic_num = [] 
         for i in range(total_pages):
             url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=6&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
-            headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36', 
+            headers = {'User-Agent': 'python-requests/2.18.4', 
                        'Connection': 'close'}
             proxy = {'http': '33.33.33.10:8118'}
-            myweb = rq.get(url, headers=headers, proxies=proxy, timeout=30)
+            myweb = session.get(url, headers=headers, timeout=30, proxies=proxy)
             comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', myweb.text)
             item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
             score = re.findall('\"referenceType\":\"Product\"(.*?)\,\"status\"', myweb.text)
