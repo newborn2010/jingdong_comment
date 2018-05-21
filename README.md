@@ -27,3 +27,5 @@
 (5.19 更新：对词向量训练的尝试）
 
 (5.20 更新：更新对 requests 请求的 headers，proxy，connect，更新了 timeout)
+
+(5.21 更新：尝试解决 Max retries exceeded with url 问题)
