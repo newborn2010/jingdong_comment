@@ -13,6 +13,7 @@ import pymysql as sql
 import pandas as pd
 import time 
 import jieba
+import gensim
 from gensim.models import word2vec
 
 begin = time.time()
@@ -34,27 +35,24 @@ f1 = open('/Users/zt/Desktop/test.txt')
 f2 = open('/Users/zt/Desktop/test_cut.txt', 'a')  
 lines =f1.readlines()  
 for line in lines:  
-    line = line.replace('\t', '').replace('\n', '').replace('，', ' ').replace('。', '').replace('   ', '')
+    line = line.replace('\t', '').replace('\n', '').replace('，', '').replace('。', '').replace('   ', '')
     seg_list = jieba.cut(line, cut_all=False)  
-    f2.write(' '.join(seg_list))  
+    f2.write(' '.join(seg_list) + '\n')  
 f1.close()  
 f2.close()
 
 sentences = word2vec.Text8Corpus(u'/Users/zt/Desktop/test_cut.txt')
-model = word2vec.Word2Vec(sentences, min_count=1, size=2000)
+model = word2vec.Word2Vec(sentences, size=1000, iter=15)
 
-#with open('/Users/zt/Desktop/test.txt', 'r') as comm:
- #   comme = comm.read()    
+with open('/Users/zt/Desktop/test_cut.txt', 'r') as comm:
+    comme = comm.read()
 
 end = time.time()
 print('Total {0:.3f} min !'.format((end-begin)/60))  
 
-  
 
-
-
-
-
+model.save('/Users/zt/Desktop/word2vec_model')
+model = gensim.models.Word2Vec.load('/Users/zt/Desktop/word2vec_model')
 
 
 
