@@ -30,4 +30,4 @@
 
 (5.21 更新：尝试解决 Max retries exceeded with url 问题,增加了两个 IP 地址)
 
-
+(5.22 更新：可以同时开两个 console 一起进行，是否可以加快）
