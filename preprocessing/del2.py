@@ -18,8 +18,6 @@ import time
 begin = time.time()
 brands = ['jd']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 for brand in brands:
-    all_records = 0
-    rid_number = []
     # connect mysql
     db_info = {'user': 'root',
                'password': '',
@@ -36,10 +34,10 @@ for brand in brands:
         data = pd.read_sql(ifo, con)
         con.close()
         data = data.sort_values(by=['time'], ascending=False)
-        length = len(data)
+        #length = len(data)
         delete = []
         count = 0
-        for i in range(3):                      #range(length - 99):
+        for i in range(0,1):                      #range(length - 99):
             if i+100 <= len(data):
                 dirty = data[i:i+100]
                 data = data.drop(list(range(i, i+100)))
