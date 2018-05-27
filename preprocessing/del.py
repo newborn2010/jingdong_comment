@@ -54,7 +54,7 @@ for brand in brands:
         con.commit()
         cursor.close()        
         length = len(pd.read_sql(ifo, con))
-        distinct = length - ori_length
+        distinct = ori_length - length
         data = pd.read_sql(ifo, con)
         con.close()
         # 以 100 为单位去重
@@ -73,7 +73,6 @@ for brand in brands:
     print('We delete: {0} and {1} in {2}, count: {3} , ori:{4}'.format(sum(delete), distinct, brand, count, ori_length))
 end = time.time()
 print('Time: {0:.3f} min !'.format((end - begin)/60))
-        
         
         
         
