@@ -33,6 +33,21 @@ for brand in brands:
     for name in table_names:
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
+        temp_0 = 'create table temp as select name, item, page, time, score, day, after_day, good, bad, exp, pic, level, comments, after_comments from ' + name
+        drop_0 = 'drop table ' + name
+        rename_0 = 'rename table temp to ' + name
+        temp_1 = 'create table temp as select distinct * from ' + name
+        drop_1 = 'drop table ' + name
+        rename_1 = 'rename table temp to ' + name
+        cursor = con.cursor()
+        cursor.execute(temp_0)
+        cursor.execute(drop_0)
+        cursor.execute(rename_0)
+        cursor.execute(temp_1)
+        cursor.execute(drop_1)
+        cursor.execute(rename_1)
+        con.commit()
+        cursor.close()        
         data = pd.read_sql(ifo, con)
         con.close()
         data = data.sort_values(by=['time'], ascending=False)
@@ -47,8 +62,8 @@ for brand in brands:
                 delete.append(100 - len(clear))
                 count +=1
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
+    print('We delete: {0} in {1}, count: {2}'.format(sum(delete), brand, count))
 end = time.time()
-print('Delete: {0} , count: {1}'.format(sum(delete), count))
 print('Time: {0:.3f} min !'.format((end - begin)/60))
         
         
