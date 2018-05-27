@@ -33,9 +33,11 @@ for brand in brands:
     for name in table_names:
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
+        # 去除 ID
         temp_0 = 'create table temp as select name, item, page, time, score, day, after_day, good, bad, exp, pic, level, comments, after_comments from ' + name
         drop_0 = 'drop table ' + name
         rename_0 = 'rename table temp to ' + name
+        # 去除完全重复项
         temp_1 = 'create table temp as select distinct * from ' + name
         drop_1 = 'drop table ' + name
         rename_1 = 'rename table temp to ' + name
@@ -50,6 +52,7 @@ for brand in brands:
         cursor.close()        
         data = pd.read_sql(ifo, con)
         con.close()
+        # 以 100 为单位去重
         data = data.sort_values(by=['time'], ascending=False)
         for i in range(len(data) - 99):
             if i+100 <= len(data):
