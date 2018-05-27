@@ -28,27 +28,27 @@ for brand in brands:
     find_name = 'select table_name from information_schema.tables where table_schema=\'' + brand + '\' and table_type=\'base table\';'
     table_names = list(pd.read_sql(find_name, con)['table_name'])
     con.close()
+    delete = []
+    count = 0
     for name in table_names:
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
         data = pd.read_sql(ifo, con)
         con.close()
         data = data.sort_values(by=['time'], ascending=False)
-        #length = len(data)
-        delete = []
-        count = 0
-        for i in range(0,1):                      #range(length - 99):
+        for i in range(len(data) - 99):
             if i+100 <= len(data):
                 dirty = data[i:i+100]
                 data = data.drop(list(range(i, i+100)))
                 clear = dirty.drop_duplicates(subset=['comments'], keep='last')
-                data = data.append(clear, ignore_index=True)
+                data = data.append(clear)
                 data = data.sort_values(by=['time'], ascending=False)
+                data = data.reset_index(drop=True)
                 delete.append(100 - len(clear))
                 count +=1
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
-        print(delete, count)
 end = time.time()
+print('Delete: {0} , count: {1}'.format(sum(delete), count))
 print('Time: {0:.3f} min !'.format((end - begin)/60))
         
         
