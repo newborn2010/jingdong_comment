@@ -70,7 +70,7 @@ for brand in brands:
                 delete.append(100 - len(clear))
                 count +=1
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
-    print('We delete: {0} and {1} in {2}, count: {3} , ori:{4}'.format(sum(delete), distinct, brand, count, ori_length))
+    print('We delete: {0} and {1} total {2} in {3}, count: {4}, ori:{5}'.format(sum(delete), distinct, sum(delete)+distinct, brand, count, ori_length))
 end = time.time()
 print('Time: {0:.3f} min !'.format((end - begin)/60))
         
