@@ -30,6 +30,7 @@ for brand in brands:
     con.close()
     delete = []
     count = 0
+    dist = []
     for name in table_names:
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
@@ -46,15 +47,14 @@ for brand in brands:
         cursor.execute(temp_0)
         cursor.execute(drop_0)
         cursor.execute(rename_0)
-        print('Delete id complete !')
         cursor.execute(temp_1)
         cursor.execute(drop_1)
         cursor.execute(rename_1)
-        print('Distinct complete !')
         con.commit()
         cursor.close()        
         length = len(pd.read_sql(ifo, con))
         distinct = ori_length - length
+        dist.append(distinct)
         data = pd.read_sql(ifo, con)
         con.close()
         # 以 100 为单位去重
@@ -70,7 +70,7 @@ for brand in brands:
                 delete.append(100 - len(clear))
                 count +=1
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
-    print('We delete: {0} and {1} total {2} in {3}, count: {4}, ori:{5}'.format(sum(delete), distinct, sum(delete)+distinct, brand, count, ori_length))
+    print('We delete: {0} and {1} total {2} in {3}, count: {4}, ori:{5}'.format(sum(delete), sum(dist), sum(delete)+sum(distinct), brand, count, ori_length))
 end = time.time()
 print('Time: {0:.3f} min !'.format((end - begin)/60))
         
