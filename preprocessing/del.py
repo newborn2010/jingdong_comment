@@ -31,10 +31,12 @@ for brand in brands:
     delete = []
     count = 0
     dist = []
+    original_length = 0
     for name in table_names:
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
         ori_length = len(pd.read_sql(ifo, con))
+        original_length += ori_length
         # 去除 ID
         temp_0 = 'create table temp as select name, item, page, time, score, day, after_day, good, bad, exp, pic, level, comments, after_comments from ' + name
         drop_0 = 'drop table ' + name
