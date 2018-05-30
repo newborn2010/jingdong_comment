@@ -136,6 +136,8 @@ for brand in brands:
                     cut = i
                     break
                 cut = 'no'
+            if cut == 'no':
+                lose = 1
             if type(cut) == type(1):
                 comments = comments[:cut]
                 times = times[:cut]
@@ -169,9 +171,9 @@ for brand in brands:
     time.sleep(300)
 end = time.time()
 print('Total {0:.1f} min ,sumsang update {1} honor update {2}!'.format((end-begin)/60, updates[0], updates[1]))
-with open('/Users/zt/Desktop/update2.txt', 'a') as ud:
-    ud.writelines(str(updates) + '\n')
-    
+if lose == 1:
+    print('We may lose some comments!')
+
 
 
     
