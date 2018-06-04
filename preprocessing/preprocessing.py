@@ -13,6 +13,7 @@ import pymysql as sql
 import pandas as pd
 from sqlalchemy import create_engine
 import time 
+import sklearn.feature_extraction.text
 
 begin = time.time()
 brands = ['jd'] #['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
@@ -36,6 +37,11 @@ for brand in brands:
         con.commit()
         cursor.close()
         data = pd.read_sql(ifo, con)
+        
+        stop_word = []
+        with open('/Users/zt/Desktop/project/stop_words/stop_test.txt', 'r') as stop:
+            for line in stop.readlines():
+                stop_word.append(line.rstrip("\n"))
         
 end = time.time()
 print('Time: {0:.3f} min !'.format((end - begin)/60))
