@@ -42,7 +42,7 @@ f1.close()
 f2.close()
 
 sentences = word2vec.Text8Corpus(u'/Users/zt/Desktop/test_cut.txt')
-model = word2vec.Word2Vec(sentences, size=1000, iter=15)
+model = word2vec.Word2Vec(sentences, size=1000, iter=15, sg=1, window=10)
 
 with open('/Users/zt/Desktop/test_cut.txt', 'r') as comm:
     comme = comm.read()
@@ -50,9 +50,14 @@ with open('/Users/zt/Desktop/test_cut.txt', 'r') as comm:
 end = time.time()
 print('Total {0:.3f} min !'.format((end-begin)/60))  
 
+  
 
-model.save('/Users/zt/Desktop/word2vec_model')
-model = gensim.models.Word2Vec.load('/Users/zt/Desktop/word2vec_model')
+
+
+
+
+# model.save('/Users/zt/Desktop/word2vec_model')
+# model = gensim.models.Word2Vec.load('/Users/zt/Desktop/model/cbow,size1000,iter15/word2vec_model')
 
 
 
