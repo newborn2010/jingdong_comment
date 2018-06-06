@@ -50,7 +50,7 @@ def word_split(input_path, output_path, dict_path=None, stop_word=None):
     f2.close()
     return train
     
-def LDA_model(input_path, output_path, dict_path=None, stop_word=None, topic=3):
+def LDA_model(input_path, output_path, dict_path=None, stop_word=None, topic=10):
     '''
     输入未分词文本，每行为一个记录，输出 LDA 主题模型结果。
     '''
@@ -65,41 +65,6 @@ def LDA_model(input_path, output_path, dict_path=None, stop_word=None, topic=3):
     end = time.time()
     print(lda.print_topics(topic))
     print('Total {0:.3f} min !'.format((end-begin)/60))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
