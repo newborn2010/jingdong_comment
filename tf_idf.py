@@ -29,14 +29,20 @@ def tf_idf(input_path, stop_word=None, show=10):
         for line in i.readlines():
             corpus.append(line.rstrip('\n'))
     # 设置停用词
-    with open('/Users/zt/Desktop/project/stop_words/stop_1.txt', 'r') as stop:
-        stop_words = []
-        for line in stop.readlines():
-            stop_words.append(line.rstrip('\n'))
-    with open('/Users/zt/Desktop/project/stop_words/stop_2.txt', 'r') as stop:
-        for line in stop.readlines():
-            stop_words.append(line.rstrip('\n'))
-    stop_words = list(set(stop_words))
+    if stop_word == None:
+        with open('/Users/zt/Desktop/project/stop_words/stop_1.txt', 'r') as stop:
+            stop_words = []
+            for line in stop.readlines():
+                stop_words.append(line.rstrip('\n'))
+        with open('/Users/zt/Desktop/project/stop_words/stop_2.txt', 'r') as stop:
+            for line in stop.readlines():
+                stop_words.append(line.rstrip('\n'))
+        stop_words = list(set(stop_words))
+    else:
+        with open(stop_word, 'r') as stop:
+            stop_words = []
+            for line in stop.readlines():
+                stop_words.append(line.rstrip('\n'))
     # tf_idf
     vectorizer = TfidfVectorizer(stop_words=stop_words, min_df=1)
     vectorizer.fit_transform(corpus)
