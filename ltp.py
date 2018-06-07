@@ -11,6 +11,7 @@ warnings.filterwarnings('ignore')
 from pyltp import SentenceSplitter
 from pyltp import Segmentor
 from pyltp import Postagger
+from pyltp import NamedEntityRecognizer
 from pyltp import Parser
 
 def sentence_splitter(par):
@@ -46,6 +47,21 @@ def posttagger(sentence):
     postagger.release()
     return list(postags)
 
+def ner(sentence):
+    '''
+    LTP 命名实体识别
+    '''
+    recognizer = NamedEntityRecognizer() 
+    recognizer.load('/Users/zt/Documents/ltp_data/ner.model') 
+    words = segmentor(sentence)
+    postags = posttagger(sentence)
+    netags = recognizer.recognize(words, postags)  
+    for word, ntag in zip(words, netags):
+        if ntag != 'O':
+            print(word + ' / ' + ntag)
+    recognizer.release() 
+    return netags
+
 def parse(sentence):
     '''
     LTP 依存句法分析
@@ -67,36 +83,6 @@ sentence = '詹姆斯今天在克利夫兰吃汉堡，他觉得汉堡很好吃�
 sentence_splitter(sentence)
 segmentor(sentence)
 posttagger(sentence)
+ner(sentence)
 parse(sentence)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
