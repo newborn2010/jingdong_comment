@@ -46,18 +46,11 @@ for brand in brands:
             for line in i.readlines():
                 comment.append(line.rstrip("\n"))
         comment = comment[1:]
-        
+        # 去除停用词
         stop_word = []
         with open('/Users/zt/Desktop/project/stop_words/stop_test.txt', 'r') as stop:
             for line in stop.readlines():
                 stop_word.append(line.rstrip("\n"))
-        tfidf = TfidfVectorizer(stop_words=stop_word)
-        result = tfidf.fit_transform(comment)
-        word = tfidf.get_feature_names()
-        weight = result.toarray()
-        for i in range(len(weight)):
-            for j in range(len(word)):
-                print(word[j], weight[i][j])
         
         
         
