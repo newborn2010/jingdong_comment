@@ -32,21 +32,28 @@ def word_split(input_path, output_path, dict_path=None, stop_word=None):
         seg_list = list(jieba.cut(line, cut_all=False))
         out = []
         # 设置 stop_word
+        stop_words = defaultdict(int)
+        with open('/Users/zt/Desktop/project/stop_words/stop_1.txt', 'r') as stop:
+            for line in stop.readlines():
+                stop_words[line.rstrip('\n')] = 1
+        with open('/Users/zt/Desktop/project/stop_words/stop_2.txt', 'r') as stop:
+            for line in stop.readlines():
+                stop_words[line.rstrip('\n')] = 1
+        #  设置额外的 stop_word
         if stop_word != None:
             stop_words = defaultdict(int)
             with open(stop_word, 'r') as stop:
                 for line in stop.readlines():
                     stop_words[line.rstrip('\n')] = 1
-            for word in seg_list:
-                if stop_words[word] != 1:
-                    out.append(word)
-        else:
-            out = seg_list
+        # 去 stop_word
+        for word in seg_list:
+            if stop_words[word] != 1:
+                out.append(word)
         if out != []:
-            train.append(out)
+            #train.append(out)
             f2.write(' '.join(out) + '\n')  
     f1.close()  
     f2.close()
     end = time.time()
     print('Total {0:.3f} min !'.format((end-begin)/60))
-    return train
+    #return train
