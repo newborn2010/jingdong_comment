@@ -88,7 +88,7 @@ for brand in brands:
             url = 'https://sclub.jd.com/comment/productPageComments.action?callback=fetchJSON_comment98vv8571&productId=' + str(itemId) + '&score=0&sortType=6&page=' + str(i) + '&pageSize=10&isShadowSku=0&fold=1'
             headers = {'User-Agent': 'python-requests/2.18.4', 
                        'Connection': 'close'}
-            proxy = ['33.33.33.10:8118', '222.185.22.153', '61.135.217.7', '183.128.243.71', '61.135.217.7']
+            proxy = ['33.33.33.10:8118', '222.185.22.153', '61.135.217.7', '183.128.243.71', '61.135.217.7', '116.213.98.6', '59.32.37.63', '183.159.84.172', '122.114.31.177', '106.56.102.206']
             myweb = session.get(url, headers=headers, timeout=30, proxies={'http': random.choice(proxy)})
             comment_time_name = re.findall('\"topped\":(.*?)\,\"referenceName\"', myweb.text)
             item_name = re.findall('\"referenceName\":(\".*?\")\,\"referenceTime\"', myweb.text)
