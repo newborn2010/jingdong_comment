@@ -98,8 +98,9 @@ for brand in brands:
             day = re.findall('\"days\":(.*?),\"afterDays\"', myweb.text)
             for mess in ifo:
                 good_bad = re.findall('\"usefulVoteCount\":(.*?),\"uselessVoteCount\":(.*?),\"userImage', mess[0])
-                good = good_bad[0][0]
-                bad = good_bad[0][1]
+                if good_bad != []:
+                    good = good_bad[0][0]
+                    bad = good_bad[0][1]
                 if re.findall('\"anonymousFlag\":(.*?),\"userExpValue\":(.*?),\"productSales', mess[0]) == []:
                     exp = '0'
                 else:
