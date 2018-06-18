@@ -174,7 +174,4 @@ print('Total {0:.1f} min , xiaomi update {1} huawei update {2} iphone update {3}
 if lose == 1:
     print('We may lose some comments!')
 
-    
-
-
-    
+   
