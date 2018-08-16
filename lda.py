@@ -97,14 +97,18 @@ def split_sentence(sentence):
     按照 ，。？！ 分割句子
     '''
     out = []
-    loc = [0]
-    for i in zhon.hanzi.punctuation.strip().replace('！', '').replace('？', '').replace('。', '').replace('，', ''):
-        sentence.replace(i, '')
-    for j in range(len(sentence)):
-        if sentence[j] in '，。！？':
+    loc = []
+    for i in zhon.hanzi.punctuation.strip().replace('！？｡。', '').replace('，', '').replace('、', '').replace('﹔', '').replace('；', ''):
+        sentence.replace(i, '')]
+    for t in range(len(sentence)):
+        if sentence[t] not in '，。！？!?,.;；、':
+            loc.append(t)
+            break
+    for j in range(len(sentence)-1):
+        if sentence[j] in '，。！？!?,.;；、' and sentence[j+1] not in '，。！？!?,.;；、':
             loc.append(j)
-            out.append(sentence[loc[len(loc)-2]:j])
-    out.append(sentence[loc[-1]:])
+            out.append(sentence[loc[-2]:j+1])
+    out.append(sentence[loc[-1]+1:])
     return out
             
 def sentence_splitter(par):
@@ -171,4 +175,36 @@ def parse(sentence):
     return [(words[i], res[i][1], words[res[i][0]-1]) for i in range(len(res))]        
         
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
