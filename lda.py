@@ -103,7 +103,8 @@ def split_sentence(sentence):
     for j in range(len(sentence)):
         if sentence[j] in '，。！？':
             loc.append(j)
-            out.append(sentence[loc[len(loc)-2]+1:j])
+            out.append(sentence[loc[len(loc)-2]:j])
+    out.append(sentence[loc[-1]:])
     return out
             
 def sentence_splitter(par):
@@ -170,36 +171,4 @@ def parse(sentence):
     return [(words[i], res[i][1], words[res[i][0]-1]) for i in range(len(res))]        
         
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
