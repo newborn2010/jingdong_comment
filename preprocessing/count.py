@@ -14,7 +14,7 @@ import pandas as pd
 import time 
 
 begin = time.time()
-brands = ['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
+brands = ['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new'] #['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 al = 0
 for brand in brands:
     all_records = 0
@@ -32,7 +32,7 @@ for brand in brands:
         ori = len(data)
         all_records += len(data)
     al += all_records
-    print('we have {0} in {1}'.format(all_records, brand))
+    print('we have {0} of {1} in {2}'.format(all_records, len(table_names), brand))
 end = time.time()
 print('Total {0} in {1:.3f} min !'.format(al, (end-begin)/60))  
 
