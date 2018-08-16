@@ -99,7 +99,7 @@ def split_sentence(sentence):
     out = []
     loc = []
     for i in zhon.hanzi.punctuation.strip().replace('！？｡。', '').replace('，', '').replace('、', '').replace('﹔', '').replace('；', ''):
-        sentence.replace(i, '')]
+        sentence.replace(i, '')
     for t in range(len(sentence)):
         if sentence[t] not in '，。！？!?,.;；、':
             loc.append(t)
