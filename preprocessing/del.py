@@ -15,8 +15,9 @@ import pandas as pd
 from sqlalchemy import create_engine
 import time 
 
+rate = 100
 begin = time.time()
-brands = ['jd']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
+brands = ['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 for brand in brands:
     # connect mysql
     db_info = {'user': 'root',
@@ -32,7 +33,10 @@ for brand in brands:
     count = 0
     dist = []
     original_length = 0
+    cc = 0
     for name in table_names:
+        cc += 1
+        print('Now : table {0} in {1}'.format(cc, brand))
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
         ori_length = len(pd.read_sql(ifo, con))
@@ -57,22 +61,25 @@ for brand in brands:
         length = len(pd.read_sql(ifo, con))
         distinct = ori_length - length
         dist.append(distinct)
+        con.close()
+        time.sleep(3)
+        con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
         data = pd.read_sql(ifo, con)
         con.close()
-        # 以 100 为单位去重
+        # 以 rate 为单位去重
         data = data.sort_values(by=['time'], ascending=False)
-        for i in range(len(data) - 99):
-            if i+100 <= len(data):
-                dirty = data[i:i+100]
-                data = data.drop(list(range(i, i+100)))
+        for i in range(len(data) - rate + 1):
+            if i+rate <= len(data):
+                dirty = data[i:i+rate]
+                data = data.drop(list(range(i, i+rate)))
                 clear = dirty.drop_duplicates(subset=['comments'], keep='last')
                 data = data.append(clear)
                 data = data.sort_values(by=['time'], ascending=False)
                 data = data.reset_index(drop=True)
-                delete.append(100 - len(clear))
+                delete.append(rate - len(clear))
                 count +=1
         pd.io.sql.to_sql(data, name, engine, if_exists='replace', index=False) 
-    print('We delete: {0} and {1} total {2} in {3}, count: {4}, ori:{5}'.format(sum(delete), sum(dist), sum(delete)+sum(distinct), brand, count, original_length))
+    print('We delete: {0} and {1} total {2} in {3}, count: {4}, ori:{5}'.format(sum(delete), sum(dist), sum(delete)+sum(dist), brand, count, original_length))
 end = time.time()
 print('Time: {0:.3f} min !'.format((end - begin)/60))
         
