@@ -102,7 +102,7 @@ def split_sentence(sentence):
         sentence.replace(i, '')
     for t in range(len(sentence)):
         if sentence[t] not in '，。！？!?,.;；、':
-            loc.append(t)
+            loc.append(t-1)
             break
     for j in range(len(sentence)-1):
         if sentence[j] in '，。！？!?,.;；、' and sentence[j+1] not in '，。！？!?,.;；、':
