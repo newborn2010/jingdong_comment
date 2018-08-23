@@ -23,6 +23,7 @@ n_dir = os.listdir(n_path)
 p_dir.remove('.DS_Store')
 n_dir.remove('.DS_Store')
 
+p_words = defaultdict(int)
 p_word = []
 for i in p_dir:
     with open(p_path + i, 'r', encoding='utf-8') as inp:
@@ -30,7 +31,10 @@ for i in p_dir:
         for j in a:
             p_word.append(j.replace('\n', '').replace(' ', ''))
 p_word = list(set(p_word))   
+for i in p_word:
+    p_words[i] = 1
 
+n_words = defaultdict(int)
 n_word = []
 for i in n_dir:
     with open(n_path + i, 'r', encoding='utf-8') as inp:
@@ -38,7 +42,9 @@ for i in n_dir:
         for j in a:
             n_word.append(j.replace('\n', '').replace(' ', ''))
 n_word = list(set(n_word))          
-            
+for i in n_word:
+    n_words[i] = 1
+    
 begin = time.time()
 brands = ['samsung_new']#['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 for brand in brands:
