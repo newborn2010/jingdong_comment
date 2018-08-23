@@ -13,7 +13,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 import time 
 import lda
-
+from collections import defaultdict
 
 begin = time.time()
 brands = ['samsung_new']#['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
@@ -47,7 +47,15 @@ for brand in brands:
                 # 划分分句后的句子为主体和标点
                 words = i[:j]
                 doc = i[j:]
+                # 先处理标点
+                doc.replace('？！', '！！').replace('?!', '!!')
+                doc_score = defaultdict(int)
+                for t in doc:
+                    doc_score[t] += 1
+                k = 1.5**(doc_score['！'] + doc_score['!']) * 0.8**(doc_score['?'] + doc_score['？'])
+                # 处理主体
                 s_word = lda.word_split(words)
+                
                 zhuti.append(s_word)
                 biaodian.append(doc)
                 
