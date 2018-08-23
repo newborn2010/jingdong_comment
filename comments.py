@@ -14,6 +14,19 @@ from sqlalchemy import create_engine
 import time 
 import lda
 from collections import defaultdict
+import os
+
+p_path = '/Users/zhengtian/Desktop/sentiment dict/p/'
+n_path = '/Users/zhengtian/Desktop/sentiment dict/n/'
+p_dir = os.listdir(p_path)
+n_dir = os.listdir(n_path)
+p_dir.remove('.DS_Store')
+n_dir.remove('.DS_Store')
+
+for i in p_dir:
+    with open(p_path + i, 'r') as inp:
+        a = inp.read()
+p_word
 
 begin = time.time()
 brands = ['samsung_new']#['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
@@ -52,7 +65,7 @@ for brand in brands:
                 doc_score = defaultdict(int)
                 for t in doc:
                     doc_score[t] += 1
-                k = 1.5**(doc_score['！'] + doc_score['!']) * 0.8**(doc_score['?'] + doc_score['？'])
+                k = 1.3**(doc_score['！'] + doc_score['!']) * 0.8**(doc_score['?'] + doc_score['？'])
                 # 处理主体
                 s_word = lda.word_split(words)
                 
