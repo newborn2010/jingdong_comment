@@ -14,6 +14,7 @@ from sqlalchemy import create_engine
 import time 
 import lda
 
+
 begin = time.time()
 brands = ['samsung_new']#['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 for brand in brands:
@@ -28,14 +29,16 @@ for brand in brands:
     table_names = list(pd.read_sql(find_name, con)['table_name'])
     con.close()
     cc = 0
-    for name in [table_names[0]]:
+    for name in [table_names[0]]: # \
         cc += 1
         print('Now : table {0} in {1} total {2}'.format(cc, brand, len(table_names)))
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
         data = pd.read_sql(ifo, con)
         comments = list(data['comments'])
-        for comment in comments:
+        for comment in [comments[0]]: # \
+            zhuti = []
+            biaodian = []
             co_split = lda.split_sentence(comment)  # 得到一个分句后的评论
             for i in co_split:
                 for j in range(len(i)):
@@ -44,6 +47,11 @@ for brand in brands:
                 # 划分分句后的句子为主体和标点
                 words = i[:j]
                 doc = i[j:]
+                s_word = lda.word_split(words)
+                zhuti.append(s_word)
+                biaodian.append(doc)
+                
+                
                 
                 
         
