@@ -23,7 +23,7 @@ from pyltp import NamedEntityRecognizer
 from pyltp import Parser
 import lda
 
-def word_split(input_path, output_path, dict_path=None):
+def word_split(lines, dict_path=None):
     '''
     加载自定义词典并去除停用词，对文本进行分词
     '''
@@ -33,9 +33,6 @@ def word_split(input_path, output_path, dict_path=None):
     if dict_path != None:
         jieba.load_userdict(dict_path)
     # 分词
-    f1 = open(input_path)  
-    f2 = open(output_path + '/cut.txt', 'a')  
-    lines =f1.readlines()  
     for line in lines:  
         line = line.replace('\t', '').replace('\n', '').replace('，', '').replace('。', '').replace(' ', '')
         seg_list = list(jieba.cut(line, cut_all=False))
@@ -47,9 +44,6 @@ def word_split(input_path, output_path, dict_path=None):
                 out.append(word)
         if out != []:
             train.append(out)
-            f2.write(' '.join(out) + '\n')  
-    f1.close()  
-    f2.close()
     return train
     
 def LDA_model(input_path, output_path, dict_path=None, stop_word=None, topic=10):
