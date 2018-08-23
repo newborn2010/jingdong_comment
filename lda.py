@@ -28,23 +28,19 @@ def word_split(lines, dict_path=None):
     加载自定义词典并去除停用词，对文本进行分词
     '''
     jieba.enable_parallel(4)
-    train = []
     # 设置 user_dict
     if dict_path != None:
         jieba.load_userdict(dict_path)
     # 分词
-    for line in lines:  
-        line = line.replace('\t', '').replace('\n', '').replace('，', '').replace('。', '').replace(' ', '')
-        seg_list = list(jieba.cut(line, cut_all=False))
-        out = []
-        # 设置 stop_word
-        stop_words = lda.get_stopword()
-        for word in seg_list:
-            if stop_words[word] != 1:
-                out.append(word)
-        if out != []:
-            train.append(out)
-    return train
+    line = lines.replace('\t', '').replace('\n', '').replace('，', '').replace('。', '').replace(' ', '')
+    seg_list = list(jieba.cut(line, cut_all=False))
+    out = []
+    # 设置 stop_word
+    stop_words = lda.get_stopword()
+    for word in seg_list:
+        if stop_words[word] != 1:
+            out.append(word)
+    return out
     
 def LDA_model(input_path, output_path, dict_path=None, stop_word=None, topic=10):
     '''
@@ -164,37 +160,3 @@ def parse(sentence):
     parser.release() 
     return [(words[i], res[i][1], words[res[i][0]-1]) for i in range(len(res))]        
         
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
