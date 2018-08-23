@@ -21,8 +21,9 @@ from pyltp import Segmentor
 from pyltp import Postagger
 from pyltp import NamedEntityRecognizer
 from pyltp import Parser
+import lda
 
-def word_split(input_path, output_path, dict_path=None, stop_word=None):
+def word_split(input_path, output_path, dict_path=None):
     '''
     加载自定义词典并去除停用词，对文本进行分词
     '''
@@ -40,16 +41,10 @@ def word_split(input_path, output_path, dict_path=None, stop_word=None):
         seg_list = list(jieba.cut(line, cut_all=False))
         out = []
         # 设置 stop_word
-        if stop_word != None:
-            stop_words = defaultdict(int)
-            with open(stop_word, 'r') as stop:
-                for line in stop.readlines():
-                    stop_words[line.rstrip('\n')] = 1
-            for word in seg_list:
-                if stop_words[word] != 1:
-                    out.append(word)
-        else:
-            out = seg_list
+        stop_words = lda.get_stopword()
+        for word in seg_list:
+            if stop_words[word] != 1:
+                out.append(word)
         if out != []:
             train.append(out)
             f2.write(' '.join(out) + '\n')  
@@ -88,8 +83,9 @@ def get_stopword(path=None):
             for j in words:
                 key.append(j.replace('\n', ''))
     key = list(set(key))
-    value = [1 for _ in key]
-    stop_words = dict(zip(key, value))
+    stop_words = defaultdict(int)
+    for i in key:
+        stop_words[i] = 1
     return stop_words
 
 def split_sentence(sentence):
