@@ -12,6 +12,7 @@ import pymysql as sql
 import pandas as pd
 from sqlalchemy import create_engine
 import time 
+import lda
 
 begin = time.time()
 brands = ['samsung_new']#['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
@@ -33,6 +34,18 @@ for brand in brands:
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
         data = pd.read_sql(ifo, con)
+        comments = list(data['comments'])
+        for comment in comments:
+            co_split = lda.split_sentence(comment)  # 得到一个分句后的评论
+            for i in co_split:
+                for j in range(len(i)):
+                    if i[j] in '，。！？!?,.;；、':
+                        break
+                # 划分分句后的句子为主体和标点
+                words = i[:j]
+                doc = i[j:]
+                
+                
         
 
 
