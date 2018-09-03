@@ -18,11 +18,18 @@ import os
 
 p_path = '/Users/zhengtian/Desktop/sentiment dict/p/'
 n_path = '/Users/zhengtian/Desktop/sentiment dict/n/'
+cd_path = '/Users/zhengtian/Desktop/sentiment dict/cd/'
+fd_path = '/Users/zhengtian/Desktop/sentiment dict/fd/'
 p_dir = os.listdir(p_path)
 n_dir = os.listdir(n_path)
-p_dir.remove('.DS_Store')
-n_dir.remove('.DS_Store')
+cd_dir = os.listdir(cd_path)
+fd_dir = os.listdir(fd_path)
+for i in [p_dir, n_dir, cd_dir, fd_dir]:
+    if '.DS_Store' in i:
+        i.remove('.DS_Store')
 
+
+# 正负情感词典
 p_words = defaultdict(int)
 p_word = []
 for i in p_dir:
@@ -44,7 +51,32 @@ for i in n_dir:
 n_word = list(set(n_word))          
 for i in n_word:
     n_words[i] = 1
+
+# 程度词典
+cd_words = defaultdict(int)
+cd_word = []
+for i in cd_dir:
+    with open(cd_path + i, 'r', encoding='utf-8') as inp:
+        a = inp.readlines()
+        for j in a:
+            cd_word.append(j.replace('\n', '').replace(' ', ''))
+cd_word = list(set(cd_word))   
+for i in cd_word:
+    cd_words[i] = 2
     
+# 反义词典
+fd_words = defaultdict(int)
+fd_word = []
+for i in fd_dir:
+    with open(fd_path + i, 'r', encoding='utf-8') as inp:
+        a = inp.readlines()
+        for j in a:
+            fd_word.append(j.replace('\n', '').replace(' ', ''))
+fd_word = list(set(fd_word))   
+for i in fd_word:
+    fd_words[i] = -1
+
+# 计算得分    
 begin = time.time()
 brands = ['samsung_new']#['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']#['xiaomi', 'huawei', 'iphone', 'samsung', 'honor']
 for brand in brands:
@@ -85,6 +117,17 @@ for brand in brands:
                 k = 1.3**(doc_score['！'] + doc_score['!']) * 0.8**(doc_score['?'] + doc_score['？'])
                 # 处理主体
                 s_word = lda.word_split(words)
+                for m in range(len(s_word)):
+                    if s_word[m] in p_word:
+                        s_word[m] = p_words[s_word[m]]
+                    if s_word[m] in n_word:
+                        s_word[m] = n_words[s_word[m]]
+                    if s_word[m] in cd_word:
+                        s_word[m] = cd_words[s_word[m]]
+                    if s_word[m] in fd_word:
+                        s_word[m] = fd_words[s_word[m]]
+                        
+                        
                 
                 zhuti.append(s_word)
                 biaodian.append(doc)
