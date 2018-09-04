@@ -91,6 +91,7 @@ for brand in brands:
     table_names = list(pd.read_sql(find_name, con)['table_name'])
     con.close()
     cc = 0
+    comment_score = []
     for name in [table_names[0]]: # \
         cc += 1
         print('Now : table {0} in {1} total {2}'.format(cc, brand, len(table_names)))
@@ -99,10 +100,10 @@ for brand in brands:
         data = pd.read_sql(ifo, con)
         comments = list(data['comments'])
         score = []
-        for comment in [comments[0]]: # \
+        for comment in comments:
             scoress = []
             co_split = lda.split_sentence(comment)  # 得到一个分句后的评论
-            for i in co_split:
+            for i in co_split: 
                 for j in range(len(i)):
                     if i[j] in '，。！？!?,.;；、':
                         break
@@ -136,11 +137,16 @@ for brand in brands:
                         n[-1] = -1
                     s = n[-1]
                     for i in range(len(n)-1):
-                        s = s*n[i]      
+                        if type(n[i]) == type(1):
+                            s = s*n[i]      
                     scores.append(s)
                 scores = sum(scores) * k
                 scoress.append(scores)
             score.append(sum(scoress))
+        for t in range(len(comments)):
+            comment_score.append((comments[t],score[t]))
+end = time.time()
+print('Total {0:.1f} min!'.format((end-begin)/60))
                 
                     
                     
