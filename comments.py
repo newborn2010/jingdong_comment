@@ -92,15 +92,18 @@ for brand in brands:
     con.close()
     cc = 0
     comment_score = []
-    for name in [table_names[0]]: # \
+    for name in table_names:
         cc += 1
-        print('Now : table {0} in {1} total {2}'.format(cc, brand, len(table_names)))
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
         data = pd.read_sql(ifo, con)
         comments = list(data['comments'])
         score = []
+        tt = 0
         for comment in comments:
+            tt += 1
+            print('Now : table {0} in {1} total {2}'.format(cc, brand, len(table_names)))
+            print(tt,len(comments))
             scoress = []
             co_split = lda.split_sentence(comment)  # 得到一个分句后的评论
             for i in co_split: 
