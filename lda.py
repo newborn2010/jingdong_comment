@@ -23,6 +23,55 @@ from pyltp import NamedEntityRecognizer
 from pyltp import Parser
 import lda
 
+p_path = '/Users/zhengtian/Desktop/sentiment dict/p/'
+n_path = '/Users/zhengtian/Desktop/sentiment dict/n/'
+cd_path = '/Users/zhengtian/Desktop/sentiment dict/cd/'
+fd_path = '/Users/zhengtian/Desktop/sentiment dict/fd/'
+p_dir = os.listdir(p_path)
+n_dir = os.listdir(n_path)
+cd_dir = os.listdir(cd_path)
+fd_dir = os.listdir(fd_path)
+for i in [p_dir, n_dir, cd_dir, fd_dir]:
+    if '.DS_Store' in i:
+        i.remove('.DS_Store')
+# 正负情感词典
+p_words = defaultdict(int)
+p_word = []
+for i in p_dir:
+    with open(p_path + i, 'r', encoding='utf-8') as inp:
+        a = inp.readlines()
+        for j in a:
+            p_word.append(j.replace('\n', '').replace(' ', ''))
+p_word = list(set(p_word))   
+
+n_words = defaultdict(int)
+n_word = []
+for i in n_dir:
+    with open(n_path + i, 'r', encoding='utf-8') as inp:
+        a = inp.readlines()
+        for j in a:
+            n_word.append(j.replace('\n', '').replace(' ', ''))
+n_word = list(set(n_word))          
+# 程度词典
+cd_words = defaultdict(int)
+cd_word = []
+for i in cd_dir:
+    with open(cd_path + i, 'r', encoding='utf-8') as inp:
+        a = inp.readlines()
+        for j in a:
+            cd_word.append(j.replace('\n', '').replace(' ', ''))
+cd_word = list(set(cd_word))   
+    
+# 反义词典
+fd_words = defaultdict(int)
+fd_word = []
+for i in fd_dir:
+    with open(fd_path + i, 'r', encoding='utf-8') as inp:
+        a = inp.readlines()
+        for j in a:
+            fd_word.append(j.replace('\n', '').replace(' ', ''))
+fd_word = list(set(fd_word))   
+
 def word_split(lines, dict_path=None):
     '''
     加载自定义词典并去除停用词，对文本进行分词
@@ -73,6 +122,9 @@ def get_stopword(path=None):
             for j in words:
                 key.append(j.replace('\n', ''))
     key = list(set(key))
+    for j in list(set(p_word+n_word+cd_word+fd_word)):
+        if j in key:
+            key.remove(j)
     stop_words = defaultdict(int)
     for i in key:
         stop_words[i] = 1
@@ -160,3 +212,37 @@ def parse(sentence):
     parser.release() 
     return [(words[i], res[i][1], words[res[i][0]-1]) for i in range(len(res))]        
         
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
