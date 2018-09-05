@@ -112,8 +112,12 @@ for brand in brands:
                     if i[j] in '，。！？!?,.;；、':
                         break
                 # 划分分句后的句子为主体和标点
-                words = i[:j]
-                doc = i[j:]
+                if j != len(i)-1 or i[j] in '，。！？!?,.;；、':
+                    words = i[:j]
+                    doc = i[j:]
+                else:
+                    words = i
+                    doc = []
                 # 先处理标点
                 doc.replace('？！', '！！').replace('?!', '!!')
                 doc_score = defaultdict(int)
