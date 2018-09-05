@@ -15,6 +15,7 @@ import time
 import lda
 from collections import defaultdict
 import os
+import random
 
 p_path = '/Users/zhengtian/Desktop/sentiment dict/p/'
 n_path = '/Users/zhengtian/Desktop/sentiment dict/n/'
@@ -92,7 +93,7 @@ for brand in brands:
     con.close()
     cc = 0
     comment_score = []
-    for name in table_names:
+    for name in [table_names[10]]:
         cc += 1
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
@@ -100,7 +101,7 @@ for brand in brands:
         comments = list(data['comments'])
         score = []
         tt = 0
-        for comment in comments:
+        for comment in comments[:100]:
             tt += 1
             print('Now : table {0} in {1} total {2}'.format(cc, brand, len(table_names)))
             print(tt,len(comments))
@@ -146,12 +147,11 @@ for brand in brands:
                 scores = sum(scores) * k
                 scoress.append(scores)
             score.append(sum(scoress))
-        for t in range(len(comments)):
+        for t in range(len(score)):
             comment_score.append((comments[t],score[t]))
 end = time.time()
 print('Total {0:.1f} min!'.format((end-begin)/60))
                 
-                    
                     
                 
                     
