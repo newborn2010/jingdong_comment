@@ -93,7 +93,7 @@ for brand in brands:
     con.close()
     cc = 0
     comment_score = []
-    for name in [table_names[10]]:
+    for name in table_names:
         cc += 1
         ifo = 'select * from ' + name
         con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
@@ -101,7 +101,7 @@ for brand in brands:
         comments = list(data['comments'])
         score = []
         tt = 0
-        for comment in comments[:100]:
+        for comment in comments:
             tt += 1
             print('Now : table {0} in {1} total {2}'.format(cc, brand, len(table_names)))
             print(tt,len(comments))
@@ -109,30 +109,30 @@ for brand in brands:
             co_split = lda.split_sentence(comment)  # 得到一个分句后的评论
             for i in co_split: 
                 for j in range(len(i)):
-                    if i[j] in '，。！？!?,.;；、':
+                    if i[j] in ' ，。！？!?,.;；、':
                         break
                 # 划分分句后的句子为主体和标点
-                if j != len(i)-1 or i[j] in '，。！？!?,.;；、':
+                if j != len(i)-1 or i[j] in ' ，。！？!?,.;；、':
                     words = i[:j]
                     doc = i[j:]
                 else:
                     words = i
-                    doc = []
+                    doc = ''
                 # 先处理标点
-                doc.replace('？！', '！！').replace('?!', '!!')
+                doc = doc.replace('？！', '！！').replace('?!', '!!').replace('？？','！！').replace('??', '!!')
                 doc_score = defaultdict(int)
                 for t in doc:
                     doc_score[t] += 1
                 k = 1.3**(doc_score['！'] + doc_score['!']) * 0.8**(doc_score['?'] + doc_score['？'])
                 # 处理主体
                 s_word = lda.word_split(words)
-                major = [0]
+                major = [-1]
                 cut = []
                 scores = []
                 for m in range(len(s_word)):
                     if s_word[m] in p_word+n_word:
                         major.append(m)
-                        cut.append(s_word[major[-2]:major[-1]+1])
+                        cut.append(s_word[major[-2]+1:major[-1]+1])
                 for n in cut:
                     for m in range(len(n)-1):
                         if n[m] in cd_word:
@@ -148,17 +148,26 @@ for brand in brands:
                         if type(n[i]) == type(1):
                             s = s*n[i]      
                     scores.append(s)
-                scores = sum(scores) * k
-                scoress.append(scores)
-            score.append(sum(scoress))
+                scoresss = sum(scores) * k
+                scoress.append(scoresss)
+            score.append(round(sum(scoress),1))
         for t in range(len(score)):
             comment_score.append((comments[t],score[t]))
 end = time.time()
 print('Total {0:.1f} min!'.format((end-begin)/60))
                 
-                    
-                
-                    
-                    
-                    
+     
+
+
+
+
+
+#random.sample(comment_score,100)
+
+
+with open('/Users/zhengtian/Desktop/att.txt', 'a') as f:
+    for i in comment_score:
+        f.write(i[0] + ',' + str(i[1]) + '\n')
+
+
                     
