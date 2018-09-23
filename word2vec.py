@@ -13,11 +13,12 @@ import pymysql as sql
 import pandas as pd
 import time 
 import jieba
-import gensim
+import lda
 from gensim.models import word2vec
 
 begin = time.time()
-brands = ['jd']
+# stage 1
+brands = ['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']
 for brand in brands:
     # connect mysql
     con = sql.connect(host='localhost', user='root', passwd='', db=brand, charset='utf8')
@@ -26,26 +27,39 @@ for brand in brands:
     for name in table_names:
         ifo = 'select comments from ' + name
         data = pd.read_sql(ifo, con)
-        with open('/Users/zt/Desktop/test.txt', 'a') as com:
+        with open('/Users/zhengtian/Desktop/word2vec/'+ brand + '.txt', 'a') as com:
             for i in range(len(data['comments'])):
                 com.writelines(data['comments'][i] + '\n')
     con.close() 
+
+# stage 2
+brands = ['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']
+jieba.load_userdict('/Users/zhengtian/Desktop/sentiment dict/ud/ud.txt') 
+stop_words = lda.get_stopword()
+for brand in brands:
+    f1 = open('/Users/zhengtian/Desktop/word2vec/'+ brand + '.txt')  
+    f2 = open('/Users/zhengtian/Desktop/word2vec/'+ brand + '_cut.txt', 'a')  
+    lines =f1.readlines()  
+    c = 0
+    for line in lines:  
+        c += 1
+        out = []
+        print(c, len(lines))
+        line_now = line.replace('\t', '').replace('\n', '').replace('，', '').replace('。', '').replace(' ', '')
+        seg_list = list(jieba.cut(line_now, cut_all=False))
+        for word in seg_list:
+            if stop_words[word] != 1:
+                out.append(word)
+        f2.write(' '.join(out) + '\n')  
+    f1.close()  
+    f2.close()
     
-f1 = open('/Users/zt/Desktop/test.txt')  
-f2 = open('/Users/zt/Desktop/test_cut.txt', 'a')  
-lines =f1.readlines()  
-for line in lines:  
-    line = line.replace('\t', '').replace('\n', '').replace('，', '').replace('。', '').replace('   ', '')
-    seg_list = jieba.cut(line, cut_all=False)  
-    f2.write(' '.join(seg_list) + '\n')  
-f1.close()  
-f2.close()
+# stage 3
+brands = ['xiaomi_new']   
+for brand in brands:
+    sentences = word2vec.Text8Corpus(u'/Users/zhengtian/Desktop/word2vec/'+ brand + '_cut.txt')
+    model = word2vec.Word2Vec(sentences, size=100, iter=30, sg=1, window=10)
 
-sentences = word2vec.Text8Corpus(u'/Users/zt/Desktop/test_cut.txt')
-model = word2vec.Word2Vec(sentences, size=1000, iter=15, sg=1, window=10)
-
-with open('/Users/zt/Desktop/test_cut.txt', 'r') as comm:
-    comme = comm.read()
 
 end = time.time()
 print('Total {0:.3f} min !'.format((end-begin)/60))  
