@@ -137,8 +137,10 @@ for brand in brands:
 
 
 # stage 4 找拓展词典
+import jieba.posseg as posseg
+
 begin = time.time()
-brands = ['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']   
+brands = ['samsung_new'] #['xiaomi_new', 'huawei_new', 'iphone_new', 'samsung_new', 'honor_new']   
 for brand in brands:
     sentences = word2vec.Text8Corpus(u'/Users/zhengtian/Desktop/word2vec/'+ brand + '_cut.txt')
     model = word2vec.Word2Vec(sentences, size=1000, iter=50, sg=0, window=6, min_count=5)
@@ -152,7 +154,7 @@ for brand in brands:
         if word in model.wv.vocab:
             like = model.most_similar(word, topn=30)
             for i in like:
-                if i[1] > 0.5 and i[0] not in p_words:
+                if posseg.cut(i)[0].flag in ['a', 'ad', 'an', 'd'] and i[0] not in p_words:
                     p_add.append(i[0])
     p_add = list(set(p_add))
     with open('/Users/zhengtian/Desktop/word2vec/'+ brand + '_p_add.txt', 'a') as w:
@@ -167,7 +169,7 @@ for brand in brands:
         if word in model.wv.vocab:
             like = model.most_similar(word, topn=30)
             for i in like:
-                if i[1] > 0.5 and i[0] not in n_words:
+                if posseg.cut(i)[0].flag in ['a', 'ad', 'an', 'd'] and i[0] not in n_words:
                     n_add.append(i[0])
     n_add = list(set(n_add))
     with open('/Users/zhengtian/Desktop/word2vec/'+ brand + '_n_add.txt', 'a') as w:
@@ -182,7 +184,7 @@ for brand in brands:
         if word in model.wv.vocab:
             like = model.most_similar(word, topn=30)
             for i in like:
-                if i[1] > 0.5 and i[0] not in cd_words:
+                if posseg.cut(i)[0].flag in ['d', 'zg'] and i[0] not in cd_words:
                     cd_add.append(i[0])
     cd_add = list(set(cd_add))
     with open('/Users/zhengtian/Desktop/word2vec/'+ brand + '_cd_add.txt', 'a') as w:
@@ -197,7 +199,7 @@ for brand in brands:
         if word in model.wv.vocab:
             like = model.most_similar(word, topn=30)
             for i in like:
-                if i[1] > 0.5 and i[0] not in fd_words:
+                if posseg.cut(i)[0].flag in ['c'] and i[0] not in fd_words:
                     fd_add.append(i[0])
     fd_add = list(set(fd_add))
     with open('/Users/zhengtian/Desktop/word2vec/'+ brand + '_fd_add.txt', 'a') as w:
